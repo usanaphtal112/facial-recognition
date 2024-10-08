@@ -1,0 +1,71 @@
+{% extends 'components/base.html' %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .profile-header h2 {
+        margin: 0;
+        font-size: 2rem;
+    }
+    .profile-info {
+        margin-bottom: 1.5rem;
+    }
+    .profile-info p {
+        font-size: 1.1rem;
+        margin: 0.5rem 0;
+    }
+    .btn-edit, .btn-change-password {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: bold;
+        text-decoration: none;
+        margin-top: 1rem;
+    }
+    .btn-edit {
+        background-color: #007bff;
+    }
+    .btn-edit:hover {
+        background-color: #0056b3;
+    }
+    .btn-change-password {
+        background-color: #28a745;
+    }
+    .btn-change-password:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>Profile</h2>
+    </div>
+    <div class="profile-info">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Middle Name:</strong> {{ user.middle_name }}</p>
+        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p><strong>Role:</strong> {{ user.get_role_display }}</p>
+    </div>
+    <a href="{% url 'profile_edit' %}" class="btn-edit">Edit Profile</a>
+    <a href="{% url 'password_change' %}" class="btn-change-password">Change Password</a>
+</div>
+{% endblock %}

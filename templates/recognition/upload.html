@@ -1,0 +1,56 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-upload"></i> Upload Image for Recognition
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="imageInput" class="form-label">Choose an image:</label>
+                            <input type="file" class="form-control" id="imageInput" name="image" accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <div id="imagePreview" class="text-center" style="display: none;">
+                                <img id="preview" class="img-fluid rounded" alt="Image preview">
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-search"></i> Recognize Faces
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('imageInput').addEventListener('change', function(e) {
+    const preview = document.getElementById('preview');
+    const imagePreview = document.getElementById('imagePreview');
+    const file = e.target.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'components/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-id-badge"></i> Recognition Results
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="{{ recognition.image.url }}" class="img-fluid rounded" alt="Processed image">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Details</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Faces Recognized
+                                    <span class="badge bg-success rounded-pill">{{ recognition.faces_count }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Processing Time
+                                    <span class="badge bg-info rounded-pill">{{ recognition.processing_time }}ms</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Actions</h5>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'recognition:history' %}" class="btn btn-secondary">
+                                    <i class="fas fa-history"></i> View History
+                                </a>
+                                <a href="{% url 'recognition:upload' %}" class="btn btn-success">
+                                    <i class="fas fa-upload"></i> Upload Another
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-users"></i> Recognized Faces
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for face in recognition.faces %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ face.name|default:"Unknown" }}</h6>
+                                    <small class="text-muted">
+                                        Confidence: {{ face.confidence|floatformat:2 }}%
+                                    </small>
+                                </div>
+                                <span class="badge bg-{{ face.confidence > 80 ? 'success' : 'warning' }} rounded-pill">
+                                    {{ face.confidence > 80 ? 'High' : 'Low' }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

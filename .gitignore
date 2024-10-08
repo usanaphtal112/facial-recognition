@@ -1,0 +1,5 @@
+.venv/
+.env
+media/
+Model_File/
+Face_detection_model/

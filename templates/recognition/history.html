@@ -1,0 +1,82 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title mb-0">
+                <i class="fas fa-history"></i> Detection History
+            </h2>
+        </div>
+        <div class="card-body">
+            {% if detections %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Image</th>
+                                <th>Results</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detection in detections %}
+                            <tr>
+                                <td>{{ detection.timestamp|date:"M d, Y H:i" }}</td>
+                                <td>
+                                    <img src="{{ detection.image.url }}" alt="Detection image" class="img-thumbnail" style="max-width: 100px;">
+                                </td>
+                                <td>{{ detection.result }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modal{{ detection.id }}">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    <form method="post" action="{% url 'detection:delete' detection.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {% for detection in detections %}
+                <div class="modal fade" id="modal{{ detection.id }}" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detection Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ detection.image.url }}" alt="Detection image" class="img-fluid rounded mb-3">
+                                <h6>Results:</h6>
+                                <p>{{ detection.result }}</p>
+                                <h6>Date:</h6>
+                                <p>{{ detection.timestamp }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center">
+                    <p class="lead">No detection history found.</p>
+                    <a href="{% url 'detection:upload' %}" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload an Image
+                    </a>
+                    <a href="{% url 'detection:live' %}" class="btn btn-success">
+                        <i class="fas fa-camera"></i> Try Live Detection
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
